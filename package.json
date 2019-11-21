@@ -17,6 +17,8 @@
     "cbor": "^5.0.1",
     "crypto": "^1.0.1",
     "express": "^4.17.1",
-    "jsrsasign": "^8.0.12"
+    "jsrsasign": "^8.0.12",
+    "mongodb": "^3.3.4",
+    "mongoose": "^5.7.11"
   }
 }

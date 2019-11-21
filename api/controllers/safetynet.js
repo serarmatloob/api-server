@@ -78,7 +78,7 @@ function IsJsonString(str) {
 	return true;
 }
 
-let verifySafetyNetAttestation = (webAuthnResponse) => {
+let verifySafetyNetAttestation = (webAuthnResponse, nonce) => {
 	let attestationObject = webAuthnResponse;
 
 	let jwsString = attestationObject.toString('utf8');
@@ -140,6 +140,11 @@ let verifySafetyNetAttestation = (webAuthnResponse) => {
 	/* ----- Commented out to work in emulator ----- */
 	if (!PAYLOAD.basicIntegrity) {
 		console.log(`basicIntegrity is false`);
+		return false;
+	}
+
+	if (base64url.decode(PAYLOAD.nonce) !== nonce) {
+		console.log(`nonce doesn't match`);
 		return false;
 	}
 
