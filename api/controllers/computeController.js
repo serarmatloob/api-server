@@ -1,4 +1,6 @@
 var safetynet = require('./safetynet');
+const db = require('../../database')
+const Device = require('../../models/Device')
 
 exports.add = function (req, res) {
     console.log(req.body.num1)
@@ -9,21 +11,30 @@ exports.add = function (req, res) {
 
 exports.middleware = function (req, res, next) {
     console.log('middleware');
-    if(!req.body.safety || !req.body.nonce) {
+    if(!req.body.safety) {
         res.status(200).send({error: true, message: 'Access Denied'});
     }
-    // Connect to the db
-    //Write databse Insert/Update/Query code here..
 
-    // const device = new Device({ name: 'Zlatan' });
-    // device.save().then(() => console.log('meow'));
-    var safetynet_verified = safetynet.verifySafetyNetAttestation(req.body.safety, req.body.nonce);
-    console.log(safetynet_verified);
-    if(safetynet_verified){
-        next();
-    }
-    else {
-        res.status(200).send({error: true, message: 'Access Denied'});
-    }
+    db.getDeviceByAndroidId(req.body.googleAndroidId, (err, device) => {
+        if(err) {
+            console.log('error: '+err);
+        }
+        if(device) {
+            // const nonce = crypto.randomBytes(16).toString('base64');
+            var safetynet_verified = safetynet.verifySafetyNetAttestation(req.body.safety, device.nonce);
+            console.log(safetynet_verified);
+            if(safetynet_verified){
+                next();
+            }
+            else {
+                res.status(200).send({error: true, message: 'Access Denied'});
+            }
+        }
+        else {
+            res.status(200).send({error: true, message: 'Access Denied'});
+        }
+        
+        
+    })
     
 };

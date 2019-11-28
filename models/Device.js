@@ -10,8 +10,6 @@ const deviceSchema = new mongoose.Schema({
 	},
 	
 	nonce: { type: String },
-
-	integrity: { type: Boolean, default: true },
 });
 
 const Device = mongoose.model('Device', deviceSchema, 'Devices');
