@@ -21,7 +21,13 @@ exports.middleware = function (req, res, next) {
         }
         if(device) {
             // const nonce = crypto.randomBytes(16).toString('base64');
-            var safetynet_verified = safetynet.verifySafetyNetAttestation(req.body.safety, device.nonce);
+            var safetynet_verified = false;
+            try {
+                safetynet_verified = safetynet.verifySafetyNetAttestation(req.body.safety, device.nonce);
+            } catch (error) {
+                console.log(error);
+            }
+            
             console.log(safetynet_verified);
             if(safetynet_verified){
                 next();

@@ -138,10 +138,10 @@ let verifySafetyNetAttestation = (webAuthnResponse, nonce) => {
 
 
 	/* ----- Commented out to work in emulator ----- */
-	// if (!PAYLOAD.basicIntegrity) {
-	// 	console.log(`basicIntegrity is false`);
-	// 	return false;
-	// }
+	if (!PAYLOAD.basicIntegrity) {
+		console.log(`basicIntegrity is false`);
+		return false;
+	}
 	console.log(base64url.decode(PAYLOAD.nonce));
 	console.log(nonce);
 	if (base64url.decode(PAYLOAD.nonce) !== nonce) {
